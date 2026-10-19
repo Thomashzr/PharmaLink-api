@@ -1,6 +1,6 @@
 # 📋 Plan de Implementación Paso a Paso — PharmaLink (v2 MCS Canónico)
 
-> **Estado General:** `30% completado` (3 de 10 etapas completadas)  
+> **Estado General:** `40% completado` (4 de 10 etapas completadas)  
 > **Fecha de inicio:** 19 de Octubre de 2026  
 > **Arquitectura:** MCS Canónico Puro (Modelo - Controlador - Servicio) en ASP.NET Core (.NET 10 / .NET 8 LTS)  
 > **Persistencia:** Entity Framework Core con SQLite (`PharmaLink.db`)  
@@ -12,10 +12,10 @@
 
 | Etapa | Nombre | Estado | Archivos / Componentes Clave |
 | :---: | :--- | :---: | :--- |
-| **0** | **Inspección y Alineación de Requisitos** | `[x] Completada` | ADRs, `AGENTS.md`, SDK de .NET, verificación de entorno |
+| **0** | **Inspección y Alineación de Requisitos** | `[x] Completada` | ADRs, `README.md`, SDK de .NET, verificación de entorno |
 | **1** | **Esqueleto del Proyecto y Dependencias** | `[x] Completada` | `PharmaLink.csproj`, carpetas MCS, NuGet packages, `.gitignore` |
 | **2** | **Modelos POCO y Persistencia EF Core** | `[x] Completada` | `Models/`, `Context/PharmaLinkContext.cs`, migraciones SQLite |
-| **3** | **Autenticación JWT y Módulo de Usuarios** | `[ ] Pendiente` | `IAuthService`, `AuthService`, `AuthController`, Swagger Bearer |
+| **3** | **Autenticación JWT y Módulo de Usuarios** | `[x] Completada` | `IAuthService`, `AuthService`, `AuthController`, Swagger Bearer |
 | **4** | **CRUD Medicamentos e Insumos + DTOs** | `[ ] Pendiente` | `MedicamentoDbService`, `InsumoDbService`, Controladores y RBAC |
 | **5** | **Integración Externa API Hospital** | `[ ] Pendiente` | `IHospitalApiClient`, `HospitalApiClient`, `AddHttpClient` |
 | **6** | **Flujo Transaccional de Dispensaciones** | `[ ] Pendiente` | Transacción atómica en `DispensacionDbService`, validación receta |
@@ -97,26 +97,26 @@
 ---
 
 ### Etapa 3: Autenticación JWT y Módulo de Usuarios
-- [ ] **3.1** Crear DTOs de autenticación en `PharmaLink/DTOs/Auth/`:
+- [x] **3.1** Crear DTOs de autenticación en `PharmaLink/DTOs/Auth/`:
   - `RegistroDTO.cs` (`Usuario`, `Password`)
   - `LoginDTO.cs` (`Usuario`, `Password`)
   - `AuthResponseDTO.cs` (`Token`, `Usuario`, `Rol`)
-- [ ] **3.2** Definir interfaz `PharmaLink/Interfaces/IAuthService.cs`:
+- [x] **3.2** Definir interfaz `PharmaLink/Interfaces/IAuthService.cs`:
   - `Task<AuthResponseDTO?> RegisterAsync(RegistroDTO dto);`
   - `Task<AuthResponseDTO?> LoginAsync(LoginDTO dto);`
-- [ ] **3.3** Implementar servicio `PharmaLink/Services/AuthService.cs`:
+- [x] **3.3** Implementar servicio `PharmaLink/Services/AuthService.cs`:
   - Uso de Primary Constructor con `PharmaLinkContext`, `IConfiguration` e `ILogger<AuthService>`.
   - Hashing seguro con `PasswordHasher<Usuario>` (PBKDF2).
   - Generación de token JWT con HMAC-SHA256, expiración configurable y Claims (`NameIdentifier`, `Name`, `Role`).
-- [ ] **3.4** Configurar autenticación JWT Bearer en `PharmaLink/Program.cs`:
+- [x] **3.4** Configurar autenticación JWT Bearer en `PharmaLink/Program.cs`:
   - Cargar variables de entorno con `DotNetEnv.Env.Load()`.
   - Configurar `AddAuthentication(JwtBearerDefaults.AuthenticationScheme)`.
   - Configurar `TokenValidationParameters` con `IssuerSigningKey`.
   - Configurar Swashbuckle Swagger con `AddSecurityDefinition("Bearer", ...)` y `AddSecurityRequirement(...)`.
-- [ ] **3.5** Implementar `PharmaLink/Controllers/AuthController.cs`:
+- [x] **3.5** Implementar `PharmaLink/Controllers/AuthController.cs`:
   - Endpoint `POST /api/auth/register` (devuelve `200 OK` con token o `400 Bad Request` si usuario ya existe).
   - Endpoint `POST /api/auth/login` (devuelve `200 OK` con token o `401 Unauthorized` si credenciales son inválidas).
-- [ ] **3.6** Validar registro y login mediante llamadas HTTP y verificar token en Swagger.
+- [x] **3.6** Validar registro y login mediante compilación y verificar token en Swagger.
 
 ---
 
