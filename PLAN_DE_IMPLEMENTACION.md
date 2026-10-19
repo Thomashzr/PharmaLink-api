@@ -1,6 +1,6 @@
 # 📋 Plan de Implementación Paso a Paso — PharmaLink (v2 MCS Canónico)
 
-> **Estado General:** `10% completado` (1 de 10 etapas completadas)  
+> **Estado General:** `20% completado` (2 de 10 etapas completadas)  
 > **Fecha de inicio:** 19 de Octubre de 2026  
 > **Arquitectura:** MCS Canónico Puro (Modelo - Controlador - Servicio) en ASP.NET Core (.NET 10 / .NET 8 LTS)  
 > **Persistencia:** Entity Framework Core con SQLite (`PharmaLink.db`)  
@@ -13,7 +13,7 @@
 | Etapa | Nombre | Estado | Archivos / Componentes Clave |
 | :---: | :--- | :---: | :--- |
 | **0** | **Inspección y Alineación de Requisitos** | `[x] Completada` | ADRs, `AGENTS.md`, SDK de .NET, verificación de entorno |
-| **1** | **Esqueleto del Proyecto y Dependencias** | `[ ] Pendiente` | `PharmaLink.csproj`, carpetas MCS, NuGet packages, `.gitignore` |
+| **1** | **Esqueleto del Proyecto y Dependencias** | `[x] Completada` | `PharmaLink.csproj`, carpetas MCS, NuGet packages, `.gitignore` |
 | **2** | **Modelos POCO y Persistencia EF Core** | `[ ] Pendiente` | `Models/`, `Context/PharmaLinkContext.cs`, migraciones SQLite |
 | **3** | **Autenticación JWT y Módulo de Usuarios** | `[ ] Pendiente` | `IAuthService`, `AuthService`, `AuthController`, Swagger Bearer |
 | **4** | **CRUD Medicamentos e Insumos + DTOs** | `[ ] Pendiente` | `MedicamentoDbService`, `InsumoDbService`, Controladores y RBAC |
@@ -49,11 +49,11 @@
 ---
 
 ### Etapa 1: Esqueleto del Proyecto y Dependencias
-- [ ] **1.1** Crear el proyecto Web API:
+- [x] **1.1** Crear el proyecto Web API:
   ```bash
   dotnet new webapi -n PharmaLink --use-controllers
   ```
-- [ ] **1.2** Instalar paquetes NuGet requeridos:
+- [x] **1.2** Instalar paquetes NuGet requeridos:
   ```bash
   cd PharmaLink
   dotnet add package Microsoft.EntityFrameworkCore.Sqlite
@@ -62,15 +62,15 @@
   dotnet add package Swashbuckle.AspNetCore
   dotnet add package DotNetEnv
   ```
-- [ ] **1.3** Crear la estructura de directorios MCS Canónica:
+- [x] **1.3** Crear la estructura de directorios MCS Canónica:
   ```bash
   mkdir -p Context Controllers DTOs/Auth DTOs/Medicamentos DTOs/Insumos DTOs/Dispensaciones DTOs/Reposiciones Interfaces Models Services ExternalServices Middleware
   ```
-- [ ] **1.4** Configurar archivo `.gitignore` para excluir base de datos (`*.db`, `*.db-shm`, `*.db-wal`), secretos (`.env`) y carpetas `bin/`, `obj/`.
-- [ ] **1.5** Configurar plantilla inicial de `.env` (`.env.example`) con variables:
+- [x] **1.4** Configurar archivo `.gitignore` para excluir base de datos (`*.db`, `*.db-shm`, `*.db-wal`), secretos (`.env`) y carpetas `bin/`, `obj/`.
+- [x] **1.5** Configurar plantilla inicial de `.env` (`.env.example`) con variables:
   - `JWT_SECRET_KEY=clave_super_secreta_de_al_menos_32_caracteres_123456`
   - `API_KEY_SECRET=pharmalink_hospital_api_key_secure_value_2026`
-- [ ] **1.6** Verificar compilación inicial limpia con `dotnet build`.
+- [x] **1.6** Verificar compilación inicial limpia con `dotnet build`.
 
 ---
 
