@@ -1,0 +1,6 @@
+@PharmaLink_HostAddress = http://localhost:5053
+
+GET {{PharmaLink_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
