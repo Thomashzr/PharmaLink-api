@@ -1,0 +1,29 @@
+# .NET y C#
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Bases de datos SQLite
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Secretos y Entorno Local
+.env
+*.env.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logs y OS
+*.log
+.DS_Store
+Thumbs.db
