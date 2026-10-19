@@ -19,7 +19,7 @@ ETAPAS = [
         "requisitos": [
             ("docs/PROJECT_BRIEF.md", "Project Brief existente"),
             ("docs/ARCHITECTURE.md", "Arquitectura MCS documentada"),
-            ("AGENTS.md", "Instrucciones de agente presentes"),
+            ("README.md", "README principal del proyecto"),
             ("docs/decisions/ADR-001-adopcion-arquitectura-mcs-canonica.md", "ADRs base presentes")
         ]
     },
