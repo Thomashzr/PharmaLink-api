@@ -1,6 +1,6 @@
 # 📋 Plan de Implementación Paso a Paso — PharmaLink (v2 MCS Canónico)
 
-> **Estado General:** `20% completado` (2 de 10 etapas completadas)  
+> **Estado General:** `30% completado` (3 de 10 etapas completadas)  
 > **Fecha de inicio:** 19 de Octubre de 2026  
 > **Arquitectura:** MCS Canónico Puro (Modelo - Controlador - Servicio) en ASP.NET Core (.NET 10 / .NET 8 LTS)  
 > **Persistencia:** Entity Framework Core con SQLite (`PharmaLink.db`)  
@@ -14,7 +14,7 @@
 | :---: | :--- | :---: | :--- |
 | **0** | **Inspección y Alineación de Requisitos** | `[x] Completada` | ADRs, `AGENTS.md`, SDK de .NET, verificación de entorno |
 | **1** | **Esqueleto del Proyecto y Dependencias** | `[x] Completada` | `PharmaLink.csproj`, carpetas MCS, NuGet packages, `.gitignore` |
-| **2** | **Modelos POCO y Persistencia EF Core** | `[ ] Pendiente` | `Models/`, `Context/PharmaLinkContext.cs`, migraciones SQLite |
+| **2** | **Modelos POCO y Persistencia EF Core** | `[x] Completada` | `Models/`, `Context/PharmaLinkContext.cs`, migraciones SQLite |
 | **3** | **Autenticación JWT y Módulo de Usuarios** | `[ ] Pendiente` | `IAuthService`, `AuthService`, `AuthController`, Swagger Bearer |
 | **4** | **CRUD Medicamentos e Insumos + DTOs** | `[ ] Pendiente` | `MedicamentoDbService`, `InsumoDbService`, Controladores y RBAC |
 | **5** | **Integración Externa API Hospital** | `[ ] Pendiente` | `IHospitalApiClient`, `HospitalApiClient`, `AddHttpClient` |
@@ -75,24 +75,24 @@
 ---
 
 ### Etapa 2: Modelos POCO y Persistencia EF Core
-- [ ] **2.1** Crear clase POCO `PharmaLink/Models/Usuario.cs` (`Id`, `NombreUsuario`, `PasswordHash`, `Rol`).
-- [ ] **2.2** Crear clase POCO `PharmaLink/Models/Medicamento.cs` (`Id`, `Nombre`, `Presentacion`, `StockDisponible`, `PrecioUnitario`, `Dispensaciones`).
-- [ ] **2.3** Crear clase POCO `PharmaLink/Models/Insumo.cs` (`Id`, `Nombre`, `Presentacion`, `StockDisponible`, `PrecioUnitario`, `Entregas`).
-- [ ] **2.4** Crear clase POCO `PharmaLink/Models/Dispensacion.cs` (`Id`, `CodigoReceta`, `MedicamentoId`, `Medicamento`, `Cantidad`, `FechaDispensacion`).
-- [ ] **2.5** Crear enumeración `EstadoReposicion` y clase POCO `PharmaLink/Models/Reposicion.cs` (`Id`, `FechaSolicitud`, `FechaConfirmacion`, `Estado`, `Entregas`).
-- [ ] **2.6** Crear clase POCO `PharmaLink/Models/Entrega.cs` (`Id`, `ReposicionId`, `Reposicion`, `InsumoId`, `Insumo`, `Cantidad`, `FechaEntrega`).
-- [ ] **2.7** Implementar `PharmaLink/Context/PharmaLinkContext.cs` configurando `DbSet<T>` y Fluent API:
+- [x] **2.1** Crear clase POCO `PharmaLink/Models/Usuario.cs` (`Id`, `NombreUsuario`, `PasswordHash`, `Rol`).
+- [x] **2.2** Crear clase POCO `PharmaLink/Models/Medicamento.cs` (`Id`, `Nombre`, `Presentacion`, `StockDisponible`, `PrecioUnitario`, `Dispensaciones`).
+- [x] **2.3** Crear clase POCO `PharmaLink/Models/Insumo.cs` (`Id`, `Nombre`, `Presentacion`, `StockDisponible`, `PrecioUnitario`, `Entregas`).
+- [x] **2.4** Crear clase POCO `PharmaLink/Models/Dispensacion.cs` (`Id`, `CodigoReceta`, `MedicamentoId`, `Medicamento`, `Cantidad`, `FechaDispensacion`).
+- [x] **2.5** Crear enumeración `EstadoReposicion` y clase POCO `PharmaLink/Models/Reposicion.cs` (`Id`, `FechaSolicitud`, `FechaConfirmacion`, `Estado`, `Entregas`).
+- [x] **2.6** Crear clase POCO `PharmaLink/Models/Entrega.cs` (`Id`, `ReposicionId`, `Reposicion`, `InsumoId`, `Insumo`, `Cantidad`, `FechaEntrega`).
+- [x] **2.7** Implementar `PharmaLink/Context/PharmaLinkContext.cs` configurando `DbSet<T>` y Fluent API:
   - Índice único en `Usuario.NombreUsuario`.
   - Conversión a `double` para columnas `decimal` en SQLite.
   - Reglas de integridad referencial (`DeleteBehavior.Restrict` en `Dispensacion.Medicamento` y `Entrega.Insumo`, `DeleteBehavior.Cascade` en `Entrega.Reposicion`).
-- [ ] **2.8** Configurar cadena de conexión en `PharmaLink/appsettings.json` (`Data Source=pharmalink.db`).
-- [ ] **2.9** Registrar `PharmaLinkContext` en `PharmaLink/Program.cs` usando `builder.Services.AddDbContext<PharmaLinkContext>()`.
-- [ ] **2.10** Generar y aplicar la migración inicial:
+- [x] **2.8** Configurar cadena de conexión en `PharmaLink/appsettings.json` (`Data Source=pharmalink.db`).
+- [x] **2.9** Registrar `PharmaLinkContext` en `PharmaLink/Program.cs` usando `builder.Services.AddDbContext<PharmaLinkContext>()`.
+- [x] **2.10** Generar y aplicar la migración inicial:
   ```bash
   dotnet ef migrations add MigracionInicial
   dotnet ef database update
   ```
-- [ ] **2.11** Verificar compilación y creación del archivo `pharmalink.db`.
+- [x] **2.11** Verificar compilación y creación del archivo `pharmalink.db`.
 
 ---
 
