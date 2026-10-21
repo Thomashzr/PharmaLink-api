@@ -1,6 +1,6 @@
 # 📋 Plan de Implementación Paso a Paso — PharmaLink (v2 MCS Canónico)
 
-> **Estado General:** `50% completado` (5 de 10 etapas completadas)  
+> **Estado General:** `60% completado` (6 de 10 etapas completadas)  
 > **Fecha de inicio:** 19 de Octubre de 2026  
 > **Arquitectura:** MCS Canónico Puro (Modelo - Controlador - Servicio) en ASP.NET Core (.NET 10 / .NET 8 LTS)  
 > **Persistencia:** Entity Framework Core con SQLite (`PharmaLink.db`)  
@@ -17,7 +17,7 @@
 | **2** | **Modelos POCO y Persistencia EF Core** | `[x] Completada` | `Models/`, `Context/PharmaLinkContext.cs`, migraciones SQLite |
 | **3** | **Autenticación JWT y Módulo de Usuarios** | `[x] Completada` | `IAuthService`, `AuthService`, `AuthController`, Swagger Bearer |
 | **4** | **CRUD Medicamentos e Insumos + DTOs** | `[x] Completada` | `MedicamentoDbService`, `InsumoDbService`, Controladores y RBAC |
-| **5** | **Integración Externa API Hospital** | `[ ] Pendiente` | `IHospitalApiClient`, `HospitalApiClient`, `AddHttpClient` |
+| **5** | **Integración Externa API Hospital** | `[x] Completada` | `IHospitalApiClient`, `HospitalApiClient`, `AddHttpClient` |
 | **6** | **Flujo Transaccional de Dispensaciones** | `[ ] Pendiente` | Transacción atómica en `DispensacionDbService`, validación receta |
 | **7** | **Flujo de Reposiciones e Inventario** | `[ ] Pendiente` | Máquina de estados (Solicitada -> Confirmada), Resumen stock |
 | **8** | **Pipeline de Middlewares, Errores y Logs** | `[ ] Pendiente` | `ExceptionMiddleware`, `ApiKeyMiddleware`, `ILogger<T>` |
@@ -146,17 +146,17 @@
 ---
 
 ### Etapa 5: Integración con la API del Hospital
-- [ ] **5.1** Definir DTOs del servicio hospitalario externo en `PharmaLink/DTOs/External/`:
+- [x] **5.1** Definir DTOs del servicio hospitalario externo en `PharmaLink/DTOs/External/`:
   - `RecetaValidacionResultDTO.cs` (`EsValida`, `CodigoReceta`, `MedicamentoSugerido`, `Mensaje`).
-- [ ] **5.2** Definir interfaz `PharmaLink/Interfaces/IHospitalApiClient.cs`:
+- [x] **5.2** Definir interfaz `PharmaLink/Interfaces/IHospitalApiClient.cs`:
   - `Task<RecetaValidacionResultDTO> ValidarRecetaAsync(string codigoReceta);`
-- [ ] **5.3** Implementar `PharmaLink/ExternalServices/HospitalApiClient.cs`:
+- [x] **5.3** Implementar `PharmaLink/ExternalServices/HospitalApiClient.cs`:
   - Primary Constructor `(HttpClient httpClient, IConfiguration configuration, ILogger<HospitalApiClient> logger)`.
   - Lectura de URL base desde configuración (`HospitalApi:BaseUrl`).
   - Manejo de timeouts y fallos de conectividad (`HttpRequestException`) lanzando o retornando estado adecuado sin filtrar datos médicos en logs.
-- [ ] **5.4** Registrar cliente tipado en `PharmaLink/Program.cs`:
+- [x] **5.4** Registrar cliente tipado en `PharmaLink/Program.cs`:
   - `builder.Services.AddHttpClient<IHospitalApiClient, HospitalApiClient>(...);`
-- [ ] **5.5** Verificar compilación limpia.
+- [x] **5.5** Verificar compilación limpia.
 
 ---
 

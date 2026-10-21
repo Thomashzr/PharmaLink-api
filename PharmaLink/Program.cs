@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using PharmaLink.Context;
+using PharmaLink.ExternalServices;
 using PharmaLink.Interfaces;
 using PharmaLink.Services;
 
@@ -24,6 +25,14 @@ builder.Services.AddDbContext<PharmaLinkContext>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMedicamentoService, MedicamentoDbService>();
 builder.Services.AddScoped<IInsumoService, InsumoDbService>();
+
+// Cliente HTTP externo para integración hospitalaria
+builder.Services.AddHttpClient<IHospitalApiClient, HospitalApiClient>(client =>
+{
+    var baseUrl = builder.Configuration["HospitalApi:BaseUrl"] ?? "https://api-hospital.local";
+    client.BaseAddress = new Uri(baseUrl);
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
 
 // Configuración de Autenticación JWT Bearer
 var jwtSecretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")
