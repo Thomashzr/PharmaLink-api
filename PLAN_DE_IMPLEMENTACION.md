@@ -1,6 +1,6 @@
 # 📋 Plan de Implementación Paso a Paso — PharmaLink (v2 MCS Canónico)
 
-> **Estado General:** `60% completado` (6 de 10 etapas completadas)  
+> **Estado General:** `70% completado` (7 de 10 etapas completadas)  
 > **Fecha de inicio:** 19 de Octubre de 2026  
 > **Arquitectura:** MCS Canónico Puro (Modelo - Controlador - Servicio) en ASP.NET Core (.NET 10 / .NET 8 LTS)  
 > **Persistencia:** Entity Framework Core con SQLite (`PharmaLink.db`)  
@@ -18,7 +18,7 @@
 | **3** | **Autenticación JWT y Módulo de Usuarios** | `[x] Completada` | `IAuthService`, `AuthService`, `AuthController`, Swagger Bearer |
 | **4** | **CRUD Medicamentos e Insumos + DTOs** | `[x] Completada` | `MedicamentoDbService`, `InsumoDbService`, Controladores y RBAC |
 | **5** | **Integración Externa API Hospital** | `[x] Completada` | `IHospitalApiClient`, `HospitalApiClient`, `AddHttpClient` |
-| **6** | **Flujo Transaccional de Dispensaciones** | `[ ] Pendiente` | Transacción atómica en `DispensacionDbService`, validación receta |
+| **6** | **Flujo Transaccional de Dispensaciones** | `[x] Completada` | Transacción atómica en `DispensacionDbService`, validación receta |
 | **7** | **Flujo de Reposiciones e Inventario** | `[ ] Pendiente` | Máquina de estados (Solicitada -> Confirmada), Resumen stock |
 | **8** | **Pipeline de Middlewares, Errores y Logs** | `[ ] Pendiente` | `ExceptionMiddleware`, `ApiKeyMiddleware`, `ILogger<T>` |
 | **9** | **Testing Automatizado y Cierre** | `[ ] Pendiente` | `PharmaLink.Tests/`, unit tests, integración, `dotnet test` |
@@ -161,14 +161,14 @@
 ---
 
 ### Etapa 6: Flujo Transaccional de Dispensaciones
-- [ ] **6.1** Crear DTOs en `PharmaLink/DTOs/Dispensaciones/`:
+- [x] **6.1** Crear DTOs en `PharmaLink/DTOs/Dispensaciones/`:
   - `DispensacionCreateDTO.cs` (`CodigoReceta`, `MedicamentoId`, `Cantidad`).
   - `DispensacionReadDTO.cs` (`Id`, `CodigoReceta`, `MedicamentoId`, `NombreMedicamento`, `Cantidad`, `FechaDispensacion`).
-- [ ] **6.2** Definir interfaz `PharmaLink/Interfaces/IDispensacionService.cs`:
+- [x] **6.2** Definir interfaz `PharmaLink/Interfaces/IDispensacionService.cs`:
   - `Task<DispensacionReadDTO> RegistrarDispensacionAsync(DispensacionCreateDTO dto);`
   - `Task<DispensacionReadDTO?> GetByIdAsync(int id);`
   - `Task<IEnumerable<DispensacionReadDTO>> GetAllAsync();`
-- [ ] **6.3** Implementar servicio transaccional `PharmaLink/Services/DispensacionDbService.cs`:
+- [x] **6.3** Implementar servicio transaccional `PharmaLink/Services/DispensacionDbService.cs`:
   - Inyectar `PharmaLinkContext`, `IHospitalApiClient`, `ILogger<DispensacionDbService>`.
   - 1º Validar receta con `IHospitalApiClient.ValidarRecetaAsync(dto.CodigoReceta)`. Si no es válida -> lanzar excepción de negocio o retornar resultado de conflicto.
   - 2º Abrir transacción de base de datos (`await using var transaction = await context.Database.BeginTransactionAsync()`).
@@ -176,11 +176,11 @@
   - 4º Descontar stock: `medicamento.StockDisponible -= dto.Cantidad`.
   - 5º Crear y agregar registro `Dispensacion`.
   - 6º `await context.SaveChangesAsync(); await transaction.CommitAsync();`.
-- [ ] **6.4** Implementar `PharmaLink/Controllers/DispensacionesController.cs`:
+- [x] **6.4** Implementar `PharmaLink/Controllers/DispensacionesController.cs`:
   - Decorado con `[Authorize]`.
   - Endpoint `POST /api/dispensaciones` devolviendo `201 Created` o `409 Conflict`.
   - Endpoint `GET /api/dispensaciones/{id}` y `GET /api/dispensaciones`.
-- [ ] **6.5** Registrar servicio en `Program.cs` y validar compilación.
+- [x] **6.5** Registrar servicio en `Program.cs` y validar compilación.
 
 ---
 
