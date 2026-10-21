@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="PharmaLink.Tests/PharmaLink.Tests.csproj" />
+  <Project Path="PharmaLink/PharmaLink.csproj" />
+</Solution>
