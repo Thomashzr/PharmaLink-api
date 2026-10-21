@@ -1,6 +1,6 @@
 # 📋 Plan de Implementación Paso a Paso — PharmaLink (v2 MCS Canónico)
 
-> **Estado General:** `80% completado` (8 de 10 etapas completadas)  
+> **Estado General:** `90% completado` (9 de 10 etapas completadas)  
 > **Fecha de inicio:** 19 de Octubre de 2026  
 > **Arquitectura:** MCS Canónico Puro (Modelo - Controlador - Servicio) en ASP.NET Core (.NET 10 / .NET 8 LTS)  
 > **Persistencia:** Entity Framework Core con SQLite (`PharmaLink.db`)  
@@ -20,7 +20,7 @@
 | **5** | **Integración Externa API Hospital** | `[x] Completada` | `IHospitalApiClient`, `HospitalApiClient`, `AddHttpClient` |
 | **6** | **Flujo Transaccional de Dispensaciones** | `[x] Completada` | Transacción atómica en `DispensacionDbService`, validación receta |
 | **7** | **Flujo de Reposiciones e Inventario** | `[x] Completada` | Máquina de estados (Solicitada -> Confirmada), Resumen stock |
-| **8** | **Pipeline de Middlewares, Errores y Logs** | `[ ] Pendiente` | `ExceptionMiddleware`, `ApiKeyMiddleware`, `ILogger<T>` |
+| **8** | **Pipeline de Middlewares, Errores y Logs** | `[x] Completada` | `ExceptionMiddleware`, `ApiKeyMiddleware`, `ILogger<T>` |
 | **9** | **Testing Automatizado y Cierre** | `[ ] Pendiente` | `PharmaLink.Tests/`, unit tests, integración, `dotnet test` |
 
 ---
@@ -213,14 +213,14 @@
 ---
 
 ### Etapa 8: Middlewares, Manejo Global de Errores y Logging
-- [ ] **8.1** Crear `PharmaLink/Middleware/ExceptionMiddleware.cs`:
+- [x] **8.1** Crear `PharmaLink/Middleware/ExceptionMiddleware.cs`:
   - Atrapar excepciones no controladas en el pipeline.
   - Logging del error estructurado con `ILogger<ExceptionMiddleware>`.
   - Respuesta HTTP `500 Internal Server Error` o adaptada con `ProblemDetails` / JSON seguro (sin filtrar stack traces en producción).
-- [ ] **8.2** Crear `PharmaLink/Middleware/ApiKeyMiddleware.cs`:
+- [x] **8.2** Crear `PharmaLink/Middleware/ApiKeyMiddleware.cs`:
   - Validar cabecera `X-API-Key` contra `API_KEY_SECRET` para endpoints designados a integración externa.
   - Comparación en tiempo constante para mitigar ataques de tiempo (*timing attacks*).
-- [ ] **8.3** Configurar orden del pipeline en `PharmaLink/Program.cs`:
+- [x] **8.3** Configurar orden del pipeline en `PharmaLink/Program.cs`:
   1. `UseMiddleware<ExceptionMiddleware>()`
   2. Swagger (si es Development)
   3. `UseHttpsRedirection()`
@@ -229,7 +229,7 @@
   6. `UseAuthorization()`
   7. `UseMiddleware<ApiKeyMiddleware>()` (o condicional por endpoint)
   8. `MapControllers()`
-- [ ] **8.4** Auditar que no exista ningún `Console.WriteLine` en el código y todo use `ILogger<T>`.
+- [x] **8.4** Auditar que no exista ningún `Console.WriteLine` en el código y todo use `ILogger<T>`.
 
 ---
 
