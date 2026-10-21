@@ -22,6 +22,8 @@ builder.Services.AddDbContext<PharmaLinkContext>(options =>
 
 // Inyección de dependencias
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IMedicamentoService, MedicamentoDbService>();
+builder.Services.AddScoped<IInsumoService, InsumoDbService>();
 
 // Configuración de Autenticación JWT Bearer
 var jwtSecretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")

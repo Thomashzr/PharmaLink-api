@@ -1,6 +1,6 @@
 # 📋 Plan de Implementación Paso a Paso — PharmaLink (v2 MCS Canónico)
 
-> **Estado General:** `40% completado` (4 de 10 etapas completadas)  
+> **Estado General:** `50% completado` (5 de 10 etapas completadas)  
 > **Fecha de inicio:** 19 de Octubre de 2026  
 > **Arquitectura:** MCS Canónico Puro (Modelo - Controlador - Servicio) en ASP.NET Core (.NET 10 / .NET 8 LTS)  
 > **Persistencia:** Entity Framework Core con SQLite (`PharmaLink.db`)  
@@ -16,7 +16,7 @@
 | **1** | **Esqueleto del Proyecto y Dependencias** | `[x] Completada` | `PharmaLink.csproj`, carpetas MCS, NuGet packages, `.gitignore` |
 | **2** | **Modelos POCO y Persistencia EF Core** | `[x] Completada` | `Models/`, `Context/PharmaLinkContext.cs`, migraciones SQLite |
 | **3** | **Autenticación JWT y Módulo de Usuarios** | `[x] Completada` | `IAuthService`, `AuthService`, `AuthController`, Swagger Bearer |
-| **4** | **CRUD Medicamentos e Insumos + DTOs** | `[ ] Pendiente` | `MedicamentoDbService`, `InsumoDbService`, Controladores y RBAC |
+| **4** | **CRUD Medicamentos e Insumos + DTOs** | `[x] Completada` | `MedicamentoDbService`, `InsumoDbService`, Controladores y RBAC |
 | **5** | **Integración Externa API Hospital** | `[ ] Pendiente` | `IHospitalApiClient`, `HospitalApiClient`, `AddHttpClient` |
 | **6** | **Flujo Transaccional de Dispensaciones** | `[ ] Pendiente` | Transacción atómica en `DispensacionDbService`, validación receta |
 | **7** | **Flujo de Reposiciones e Inventario** | `[ ] Pendiente` | Máquina de estados (Solicitada -> Confirmada), Resumen stock |
@@ -121,27 +121,27 @@
 ---
 
 ### Etapa 4: CRUD de Medicamentos e Insumos
-- [ ] **4.1** Crear DTOs para Medicamentos en `PharmaLink/DTOs/Medicamentos/`:
+- [x] **4.1** Crear DTOs para Medicamentos en `PharmaLink/DTOs/Medicamentos/`:
   - `MedicamentoCreateDTO.cs`, `MedicamentoUpdateDTO.cs`, `MedicamentoReadDTO.cs`.
-- [ ] **4.2** Crear DTOs para Insumos en `PharmaLink/DTOs/Insumos/`:
+- [x] **4.2** Crear DTOs para Insumos en `PharmaLink/DTOs/Insumos/`:
   - `InsumoCreateDTO.cs`, `InsumoUpdateDTO.cs`, `InsumoReadDTO.cs`.
-- [ ] **4.3** Definir interfaces en `PharmaLink/Interfaces/`:
+- [x] **4.3** Definir interfaces en `PharmaLink/Interfaces/`:
   - `IMedicamentoService.cs` (`GetAllAsync`, `GetByIdAsync`, `CreateAsync`, `UpdateAsync`, `DeleteAsync`).
   - `IInsumoService.cs` (`GetAllAsync`, `GetByIdAsync`, `CreateAsync`, `UpdateAsync`, `DeleteAsync`).
-- [ ] **4.4** Implementar `PharmaLink/Services/MedicamentoDbService.cs`:
+- [x] **4.4** Implementar `PharmaLink/Services/MedicamentoDbService.cs`:
   - Primary Constructor `(PharmaLinkContext context, ILogger<MedicamentoDbService> logger)`.
   - Búsqueda filtrada con `IQueryable<Medicamento>` y `.Where()` en BD (no en memoria RAM).
   - Proyecciones `.Select()` a `MedicamentoReadDTO`.
   - Validación antes de eliminar: impedir borrado si existen dispensaciones asociadas.
-- [ ] **4.5** Implementar `PharmaLink/Services/InsumoDbService.cs`:
+- [x] **4.5** Implementar `PharmaLink/Services/InsumoDbService.cs`:
   - Primary Constructor `(PharmaLinkContext context, ILogger<InsumoDbService> logger)`.
   - Filtrado en BD con `IQueryable` y mapeo a DTOs.
   - Validación de existencia antes de actualizar o eliminar.
-- [ ] **4.6** Registrar servicios en `PharmaLink/Program.cs` (`AddScoped<IMedicamentoService, MedicamentoDbService>`, etc.).
-- [ ] **4.7** Implementar controladores delgados:
+- [x] **4.6** Registrar servicios en `PharmaLink/Program.cs` (`AddScoped<IMedicamentoService, MedicamentoDbService>`, etc.).
+- [x] **4.7** Implementar controladores delgados:
   - `PharmaLink/Controllers/MedicamentosController.cs` (anónimo para lectura, `[Authorize(Roles = "Administrador")]` para mutaciones).
   - `PharmaLink/Controllers/InsumosController.cs` (anónimo para lectura, `[Authorize(Roles = "Administrador")]` para mutaciones).
-- [ ] **4.8** Verificar compilación con `dotnet build` y probar respuestas `200`, `201`, `204`, `400`, `404`.
+- [x] **4.8** Verificar compilación con `dotnet build` y probar respuestas `200`, `201`, `204`, `400`, `404`.
 
 ---
 
