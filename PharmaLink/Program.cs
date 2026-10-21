@@ -126,10 +126,11 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
+
 // Middleware de autenticación por API Key (para integraciones externas)
 app.UseMiddleware<ApiKeyMiddleware>();
 
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
