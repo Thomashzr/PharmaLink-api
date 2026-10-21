@@ -7,6 +7,7 @@ using Microsoft.OpenApi;
 using PharmaLink.Context;
 using PharmaLink.ExternalServices;
 using PharmaLink.Interfaces;
+using PharmaLink.Middleware;
 using PharmaLink.Services;
 
 Env.Load();
@@ -95,6 +96,9 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+// Middleware Global de Excepciones (debe ser el primero en el pipeline)
+app.UseMiddleware<ExceptionMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -108,6 +112,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Middleware de autenticación por API Key (para integraciones externas)
+app.UseMiddleware<ApiKeyMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
