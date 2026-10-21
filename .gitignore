@@ -31,4 +31,7 @@ Thumbs.db
 # Instrucciones de agentes IA
 AGENTS.md
 .github/copilot-instructions.md
+.agents/
+.agent/
+
 
