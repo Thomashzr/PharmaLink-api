@@ -62,6 +62,17 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Configuración de CORS para permitir conexiones desde otras apps (Frontend / clientes)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddAuthorization();
 
 // OpenAPI / Swagger
@@ -112,6 +123,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 // Middleware de autenticación por API Key (para integraciones externas)
 app.UseMiddleware<ApiKeyMiddleware>();
