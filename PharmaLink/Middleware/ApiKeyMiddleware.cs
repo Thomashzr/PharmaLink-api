@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -43,6 +44,15 @@ public class ApiKeyMiddleware(RequestDelegate next, IConfiguration configuration
             }
 
             logger.LogInformation("Autenticación por API Key validada exitosamente para {Path}.", path);
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "ApiKeyExternalClient"),
+                new Claim(ClaimTypes.Name, "HospitalExternalService"),
+                new Claim(ClaimTypes.Role, "Administrador")
+            };
+            var identity = new ClaimsIdentity(claims, "ApiKey");
+            context.User = new ClaimsPrincipal(identity);
         }
 
         await next(context);
