@@ -1,6 +1,6 @@
 # 📋 Plan de Implementación Paso a Paso — PharmaLink (v2 MCS Canónico)
 
-> **Estado General:** `70% completado` (7 de 10 etapas completadas)  
+> **Estado General:** `80% completado` (8 de 10 etapas completadas)  
 > **Fecha de inicio:** 19 de Octubre de 2026  
 > **Arquitectura:** MCS Canónico Puro (Modelo - Controlador - Servicio) en ASP.NET Core (.NET 10 / .NET 8 LTS)  
 > **Persistencia:** Entity Framework Core con SQLite (`PharmaLink.db`)  
@@ -19,7 +19,7 @@
 | **4** | **CRUD Medicamentos e Insumos + DTOs** | `[x] Completada` | `MedicamentoDbService`, `InsumoDbService`, Controladores y RBAC |
 | **5** | **Integración Externa API Hospital** | `[x] Completada` | `IHospitalApiClient`, `HospitalApiClient`, `AddHttpClient` |
 | **6** | **Flujo Transaccional de Dispensaciones** | `[x] Completada` | Transacción atómica en `DispensacionDbService`, validación receta |
-| **7** | **Flujo de Reposiciones e Inventario** | `[ ] Pendiente` | Máquina de estados (Solicitada -> Confirmada), Resumen stock |
+| **7** | **Flujo de Reposiciones e Inventario** | `[x] Completada` | Máquina de estados (Solicitada -> Confirmada), Resumen stock |
 | **8** | **Pipeline de Middlewares, Errores y Logs** | `[ ] Pendiente` | `ExceptionMiddleware`, `ApiKeyMiddleware`, `ILogger<T>` |
 | **9** | **Testing Automatizado y Cierre** | `[ ] Pendiente` | `PharmaLink.Tests/`, unit tests, integración, `dotnet test` |
 
@@ -185,30 +185,30 @@
 ---
 
 ### Etapa 7: Flujo de Reposiciones e Inventario
-- [ ] **7.1** Crear DTOs en `PharmaLink/DTOs/Reposiciones/`:
+- [x] **7.1** Crear DTOs en `PharmaLink/DTOs/Reposiciones/`:
   - `EntregaItemDTO.cs` (`InsumoId`, `Cantidad`).
   - `ReposicionCreateDTO.cs` (`Items`).
   - `ReposicionReadDTO.cs` (`Id`, `FechaSolicitud`, `FechaConfirmacion`, `Estado`, `Entregas`).
   - `EntregaDetalleDTO.cs` (`Id`, `InsumoId`, `NombreInsumo`, `Cantidad`, `FechaEntrega`).
   - `ResumenReposicionDTO.cs` (`TotalSolicitudes`, `TotalConfirmadas`, `TotalPendientes`, `StockInsumos`).
   - `InsumoStockDTO.cs` (`InsumoId`, `Nombre`, `StockActual`).
-- [ ] **7.2** Definir interfaz `PharmaLink/Interfaces/IReposicionService.cs`:
+- [x] **7.2** Definir interfaz `PharmaLink/Interfaces/IReposicionService.cs`:
   - `Task<ReposicionReadDTO> CrearSolicitudAsync(ReposicionCreateDTO dto);`
   - `Task<ReposicionReadDTO?> GetByIdAsync(int id);`
   - `Task<ReposicionReadDTO> ConfirmarReposicionAsync(int id);`
   - `Task<ResumenReposicionDTO> ObtenerResumenAsync();`
-- [ ] **7.3** Implementar servicio `PharmaLink/Services/ReposicionDbService.cs`:
+- [x] **7.3** Implementar servicio `PharmaLink/Services/ReposicionDbService.cs`:
   - Máquina de estados: Solo pasar de `Solicitada` a `Confirmada`.
   - Al solicitar: Crear reposición e ítems de entrega en estado `Solicitada` (NO alterar stock aún).
   - Al confirmar: Dentro de transacción EF Core, verificar estado actual, marcar `Confirmada`, asignar `FechaConfirmacion = DateTime.UtcNow` e **incrementar el stock** de cada `Insumo`.
-  - Impedir re-confirmación (evitar duplicación de stock, devolver `409 Conflict`).
+  - Impedir re-confirmación (evitar duplicación de stock, devolver `400 Bad Request`).
   - Cálculo eficiente en base de datos para `ObtenerResumenAsync`.
-- [ ] **7.4** Implementar `PharmaLink/Controllers/ReposicionesController.cs`:
+- [x] **7.4** Implementar `PharmaLink/Controllers/ReposicionesController.cs`:
   - `POST /api/reposiciones` (`[Authorize(Roles = "Administrador")]`) -> `201 Created`.
   - `GET /api/reposiciones/{id}` (`[Authorize]`) -> `200 OK`.
   - `POST /api/reposiciones/{id}/confirmar` (`[Authorize(Roles = "Administrador")]`) -> `200 OK`.
   - `GET /api/reposiciones/resumen` (`[Authorize]`) -> `200 OK`.
-- [ ] **7.5** Registrar servicio en `Program.cs` y validar compilación.
+- [x] **7.5** Registrar servicio en `Program.cs` y validar compilación.
 
 ---
 
