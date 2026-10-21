@@ -52,4 +52,4 @@ El proyecto implementa la arquitectura canónica **MCS (Modelo - Controlador - S
 
 ## 4. Fuentes de Verdad y Validación de la Consigna
 
-El agente debe verificar el archivo de consigna `PharmaLink.pdf` (si está disponible en `reference/`) antes de asumir nombres específicos de tablas o campos externos de la receta hospitalaria. Si algún detalle no está especificado en el PDF, el agente debe formular una pregunta o registrar la decisión tomada en un ADR dentro de `docs/decisions/`.
+El equipo de desarrollo debe verificar el archivo de consigna oficial antes de asumir nombres específicos de tablas o campos externos de la receta hospitalaria. Si algún detalle no está especificado en la consigna, se debe formular una consulta o registrar la decisión tomada en un ADR dentro de `docs/decisions/`.

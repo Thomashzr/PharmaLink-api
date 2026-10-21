@@ -161,7 +161,7 @@ builder.Services.AddHttpClient<IHospitalApiClient, HospitalApiClient>(client =>
 
 ## 5. Justificación de la Eliminación de la Capa de Repositorios
 
-En la versión previa del kit se consideró el patrón *Repository*. Sin embargo, como se detalla en el [ADR-001](decisions/ADR-001-adopcion-arquitectura-mcs-canonica.md):
+En el análisis previo de diseño se consideró el patrón *Repository*. Sin embargo, como se detalla en el [ADR-001](decisions/ADR-001-adopcion-arquitectura-mcs-canonica.md):
 1. `DbContext` ya implementa el patrón *Unit of Work*, y cada `DbSet<T>` es un *Repository* genérico provisto por Microsoft.
 2. Añadir una capa intermedia de repositorios sobre EF Core genera duplicación innecesaria de métodos CRUD, oculta la potencia de LINQ (`IQueryable`, `Include`, `Select`) y complica la gestión de transacciones atómicas distribuidas entre múltiples entidades (como el descuento de stock y la creación de la dispensación).
 3. La arquitectura MCS canónica de la cátedra sitúa la persistencia en `...DbService`, logrando un equilibrio óptimo entre desacoplamiento, claridad y testeabilidad.

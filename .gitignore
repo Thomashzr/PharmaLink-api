@@ -28,10 +28,14 @@ obj/
 .DS_Store
 Thumbs.db
 
-# Instrucciones de agentes IA
+# Instrucciones y utilidades de agentes IA
 AGENTS.md
 .github/copilot-instructions.md
 .agents/
 .agent/
+PLAN_DE_IMPLEMENTACION.md
+docs/IMPLEMENTATION_PLAN.md
+generar_plan.sh
+scripts/
 
 

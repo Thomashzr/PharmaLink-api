@@ -7,7 +7,7 @@ Accepted
 2026-10-09
 
 ## Context
-En la versión 1 del kit de especificaciones (`PharmaLink-agent-kit`), se proponía una arquitectura híbrida que superponía el patrón *Repository* (`Repositories/` e interfaces `IRepository`) sobre Entity Framework Core, dividiendo la persistencia entre `Repositories/` y `Data/`.
+En iteraciones tempranas de diseño, se evaluó una arquitectura híbrida que superponía el patrón *Repository* (`Repositories/` e interfaces `IRepository`) sobre Entity Framework Core, dividiendo la persistencia entre `Repositories/` y `Data/`.
 
 Sin embargo, al contrastar esta propuesta con la **Guía Maestra de Arquitectura Backend RESTful (Cátedra Programación 2 / UAP)**, se observa que el estándar pedagógico y profesional promovido es el patrón **MCS (Modelo - Controlador - Servicio)** puro:
 - Los controladores (`Controllers/`) son delgados y hablan exclusivamente HTTP.

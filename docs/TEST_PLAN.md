@@ -87,7 +87,7 @@ public async Task RegistrarDispensacionAsync_RecetaValidaYStockSuficiente_DebeDe
 
 ## 4. Criterios de Aceptación para Dar por Terminado el Proyecto
 
-El proyecto se considera completado satisfactoriamente cuando el agente verifique:
+El proyecto se considera completado satisfactoriamente cuando se verifique:
 1. `dotnet build` finaliza con **0 errores y 0 advertencias**.
 2. `dotnet test` ejecuta la suite de pruebas unitarias e integración con **100% de tests aprobados**.
 3. Swagger UI está accesible en `/swagger` en entorno Development y permite autenticarse con token Bearer.
