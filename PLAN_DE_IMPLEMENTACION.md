@@ -1,6 +1,6 @@
 # 📋 Plan de Implementación Paso a Paso — PharmaLink (v2 MCS Canónico)
 
-> **Estado General:** `90% completado` (9 de 10 etapas completadas)  
+> **Estado General:** `100% completado` (10 de 10 etapas completadas)  
 > **Fecha de inicio:** 19 de Octubre de 2026  
 > **Arquitectura:** MCS Canónico Puro (Modelo - Controlador - Servicio) en ASP.NET Core (.NET 10 / .NET 8 LTS)  
 > **Persistencia:** Entity Framework Core con SQLite (`PharmaLink.db`)  
@@ -21,7 +21,7 @@
 | **6** | **Flujo Transaccional de Dispensaciones** | `[x] Completada` | Transacción atómica en `DispensacionDbService`, validación receta |
 | **7** | **Flujo de Reposiciones e Inventario** | `[x] Completada` | Máquina de estados (Solicitada -> Confirmada), Resumen stock |
 | **8** | **Pipeline de Middlewares, Errores y Logs** | `[x] Completada` | `ExceptionMiddleware`, `ApiKeyMiddleware`, `ILogger<T>` |
-| **9** | **Testing Automatizado y Cierre** | `[ ] Pendiente` | `PharmaLink.Tests/`, unit tests, integración, `dotnet test` |
+| **9** | **Testing Automatizado y Cierre** | `[x] Completada` | `PharmaLink.Tests/`, unit tests, integración, `dotnet test` |
 
 ---
 
@@ -234,30 +234,29 @@
 ---
 
 ### Etapa 9: Testing Automatizado y Verificación Final
-- [ ] **9.1** Crear proyecto de pruebas unitarias e integración:
+- [x] **9.1** Crear proyecto de pruebas unitarias e integración:
   ```bash
   dotnet new xunit -n PharmaLink.Tests
   dotnet add PharmaLink.Tests reference PharmaLink/PharmaLink.csproj
   dotnet add PharmaLink.Tests package Moq
-  dotnet add PharmaLink.Tests package Microsoft.EntityFrameworkCore.InMemory
-  dotnet add PharmaLink.Tests package FluentAssertions
+  dotnet add PharmaLink.Tests package Microsoft.EntityFrameworkCore.Sqlite
   ```
-- [ ] **9.2** Implementar pruebas de Autenticación:
+- [x] **9.2** Implementar pruebas de Autenticación:
   - Registro de usuario y validación de hash PBKDF2.
   - Login con contraseña correcta e incorrecta.
-- [ ] **9.3** Implementar pruebas de Dispensación Transaccional:
+- [x] **9.3** Implementar pruebas de Dispensación Transaccional:
   - Dispensación exitosa descuenta stock del medicamento.
   - Rechazo con stock insuficiente (rollback y excepción/conflicto).
   - Rechazo ante receta inválida por API hospitalaria.
-- [ ] **9.4** Implementar pruebas de Reposición y Máquina de Estados:
+- [x] **9.4** Implementar pruebas de Reposición y Máquina de Estados:
   - Solicitud no modifica stock de insumos de inmediato.
   - Confirmación incrementa stock exactamente en la cantidad entregada.
   - Intento de reconfirmar reposición ya confirmada arroja conflicto.
-- [ ] **9.5** Ejecutar suite completa de tests:
+- [x] **9.5** Ejecutar suite completa de tests:
   ```bash
   dotnet test
   ```
-- [ ] **9.6** Registrar cualquier decisión de ajuste final como ADR en `docs/decisions/`.
+- [x] **9.6** Registrar cualquier decisión de ajuste final como ADR en `docs/decisions/`.
 
 ---
 
