@@ -25,6 +25,7 @@ builder.Services.AddDbContext<PharmaLinkContext>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMedicamentoService, MedicamentoDbService>();
 builder.Services.AddScoped<IInsumoService, InsumoDbService>();
+builder.Services.AddScoped<IDispensacionService, DispensacionDbService>();
 
 // Cliente HTTP externo para integración hospitalaria
 builder.Services.AddHttpClient<IHospitalApiClient, HospitalApiClient>(client =>
