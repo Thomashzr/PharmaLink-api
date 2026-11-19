@@ -30,6 +30,8 @@ public class DispensacionDbServiceTests
 
             _hospitalClientMock.Setup(h => h.ValidarRecetaAsync("REC-OK-01"))
                 .ReturnsAsync(new RecetaValidacionResultDTO { EsValida = true, CodigoReceta = "REC-OK-01" });
+            _hospitalClientMock.Setup(h => h.DispensarRecetaAsync("REC-OK-01"))
+                .ReturnsAsync(new RecetaValidacionResultDTO { EsValida = true, CodigoReceta = "REC-OK-01" });
 
             var service = new DispensacionDbService(context, _hospitalClientMock.Object, _loggerMock.Object);
             var dto = new DispensacionCreateDTO { CodigoReceta = "REC-OK-01", MedicamentoId = med.Id, Cantidad = 3 };
@@ -44,6 +46,36 @@ public class DispensacionDbServiceTests
 
             var medActualizado = await context.Medicamentos.FindAsync(med.Id);
             Assert.Equal(7, medActualizado!.StockDisponible); // 10 - 3 = 7
+            _hospitalClientMock.Verify(h => h.DispensarRecetaAsync("REC-OK-01"), Times.Once);
+        }
+    }
+
+    [Fact]
+    public async Task RegistrarDispensacionAsync_RechazoAlDispensarEnHospital_DebeRevertirStockYLanzarRecetaInvalidaException()
+    {
+        // Arrange
+        var (context, connection) = TestDbContextFactory.CreateContext();
+        await using (connection)
+        await using (context)
+        {
+            var med = new Medicamento { Nombre = "Paracetamol 500mg", Presentacion = "Caja x 20", StockDisponible = 10, PrecioUnitario = 500m };
+            context.Medicamentos.Add(med);
+            await context.SaveChangesAsync();
+
+            _hospitalClientMock.Setup(h => h.ValidarRecetaAsync("REC-CONFLICT-01"))
+                .ReturnsAsync(new RecetaValidacionResultDTO { EsValida = true, CodigoReceta = "REC-CONFLICT-01" });
+            _hospitalClientMock.Setup(h => h.DispensarRecetaAsync("REC-CONFLICT-01"))
+                .ReturnsAsync(new RecetaValidacionResultDTO { EsValida = false, CodigoReceta = "REC-CONFLICT-01", Mensaje = "La receta ya fue dispensada." });
+
+            var service = new DispensacionDbService(context, _hospitalClientMock.Object, _loggerMock.Object);
+            var dto = new DispensacionCreateDTO { CodigoReceta = "REC-CONFLICT-01", MedicamentoId = med.Id, Cantidad = 3 };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<RecetaInvalidaException>(() => service.RegistrarDispensacionAsync(dto));
+
+            context.ChangeTracker.Clear();
+            var medActualizado = await context.Medicamentos.FindAsync(med.Id);
+            Assert.Equal(10, medActualizado!.StockDisponible); // Rollback mantuvo el stock en 10
         }
     }
 

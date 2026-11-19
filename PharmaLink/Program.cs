@@ -29,12 +29,23 @@ builder.Services.AddScoped<IInsumoService, InsumoDbService>();
 builder.Services.AddScoped<IDispensacionService, DispensacionDbService>();
 builder.Services.AddScoped<IReposicionService, ReposicionDbService>();
 
-// Cliente HTTP externo para integración hospitalaria
+// Cliente HTTP externo para integración hospitalaria (MediLink)
 builder.Services.AddHttpClient<IHospitalApiClient, HospitalApiClient>(client =>
 {
-    var baseUrl = builder.Configuration["HospitalApi:BaseUrl"] ?? "https://api-hospital.local";
+    var baseUrl = Environment.GetEnvironmentVariable("HOSPITAL_API_BASE_URL")
+                  ?? builder.Configuration["HospitalApi:BaseUrl"]
+                  ?? "http://localhost:5144";
     client.BaseAddress = new Uri(baseUrl);
     client.Timeout = TimeSpan.FromSeconds(10);
+
+    var apiKey = Environment.GetEnvironmentVariable("HOSPITAL_API_KEY")
+                 ?? builder.Configuration["HospitalApi:ApiKey"]
+                 ?? "compilaDeMilagro123";
+    if (!string.IsNullOrWhiteSpace(apiKey))
+    {
+        client.DefaultRequestHeaders.Remove("X-Api-Key");
+        client.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
+    }
 });
 
 // Configuración de Autenticación JWT Bearer

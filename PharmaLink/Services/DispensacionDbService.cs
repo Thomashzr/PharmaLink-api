@@ -61,6 +61,15 @@ public class DispensacionDbService(
             context.Dispensaciones.Add(dispensacion);
             await context.SaveChangesAsync();
 
+            // 3. Notificar dispensación a MediLink antes de confirmar la transacción local
+            var dispensacionExterna = await hospitalApiClient.DispensarRecetaAsync(dispensacion.CodigoReceta);
+            if (!dispensacionExterna.EsValida)
+            {
+                logger.LogWarning("Dispensación revertida: MediLink rechazó marcar como dispensada la receta '{CodigoReceta}'. Motivo: {Mensaje}",
+                    dispensacion.CodigoReceta, dispensacionExterna.Mensaje);
+                throw new RecetaInvalidaException(dispensacionExterna.Mensaje);
+            }
+
             await transaction.CommitAsync();
 
             logger.LogInformation("Dispensación {Id} registrada con éxito para receta {CodigoReceta}. Stock restante de '{Nombre}': {StockRestante}.",
