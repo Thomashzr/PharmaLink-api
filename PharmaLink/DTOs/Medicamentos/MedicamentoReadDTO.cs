@@ -6,5 +6,6 @@ public class MedicamentoReadDTO
     public string Nombre { get; set; } = string.Empty;
     public string Presentacion { get; set; } = string.Empty;
     public int StockDisponible { get; set; }
+    public int Stock => StockDisponible;
     public decimal PrecioUnitario { get; set; }
 }
